@@ -69,6 +69,29 @@ var logout = function (request, reply) {
     return reply.redirect('/');
 };
 
+
+var isAuthenticate = function(request, reply, next) {
+    if (request.auth.isAuthenticated) {
+        next(null, true);
+    }
+    next(null, false);
+};
+
+var userAuthLevel = function(request, reply, next) {
+    next(null, 2);
+};
+
+var userProfile = function(request, reply) {
+    isAuthenticate(request, reply, function(err, res) {
+        if (err || !res) {
+            return reply({code: 'err', err: { body: 'Not Authrized'} });
+        }
+        userAuthLevel(request, reply, function(err, res) {
+            reply({code: 'ok', user: {level: res}});
+        });
+    });
+};
+
 var Routes = [{
     method: 'GET',
     path: '/',
@@ -100,12 +123,19 @@ var Routes = [{
         handler: logout,
         auth: 'session'
     }
+},
+{
+    method: 'GET',
+    path: '/users/{id}',
+    config: {
+        handler: userProfile,
+        auth: 'session'
+    }
 }
 ];
 
 
 var server = new Hapi.Server('0.0.0.0',8000);
-
 server.pack.register(HapiAuthCookie, function(err) {
   server.auth.strategy('session','cookie', {
       password: 'aa123ASDF@#efaASDF@#RASDFavn__(!@*HKNASD!asdfh78awb12ADS#$FNnvas7@#e',
@@ -113,8 +143,13 @@ server.pack.register(HapiAuthCookie, function(err) {
       redirectTo: '/login',
       isSecure: false
   });
-
   server.route(Routes);
-
-    server.start();
+  server.start(function(err) {
+    if (err) {
+        console.log(err);
+    }
+    console.log('Server Start : 8000');
+  });
 });
+
+
