@@ -23,7 +23,7 @@
   "homepage": "https://github.com/doron2402/hapi-auth",
   "dependencies": {
     "async": "~0.9.0",
-    "lodash": "~2.4.1",
+    "lodash": "~4.17.11",
     "joi": "~4.6.2",
     "hapi": "~6.6.0",
     "hapi-auth-cookie": "~1.3.2"
