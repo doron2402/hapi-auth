@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/doron2402/hapi-auth",
   "dependencies": {
-    "async": "~0.9.0",
+    "async": "~3.2.2",
     "lodash": "~2.4.1",
     "joi": "~4.6.2",
     "hapi": "~6.6.0",
